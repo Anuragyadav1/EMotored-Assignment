@@ -1,0 +1,157 @@
+// import React, { useState } from "react";
+// import { FaGithub, FaTwitter, FaLinkedin, FaDiscord } from "react-icons/fa";
+
+// const Login = () => {
+//   const [isRegister, setIsRegister] = useState(false);
+
+//   return (
+//     <div className="flex h-screen w-full">
+//       {/* Left Section */}
+//       <div className="hidden md:flex flex-col justify-between bg-blue-600 text-white w-1/2 p-10 relative custom-shape">
+//         <div className="absolute top-10 left-10">
+//           <img src="/logo.png" alt="Logo" className="w-16 h-16" />
+//         </div>
+//         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl font-bold">
+//           BASE
+//         </div>
+//         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-4 left-28">
+//           <FaGithub className="text-xl" />
+//           <FaTwitter className="text-xl" />
+//           <FaLinkedin className="text-xl" />
+//           <FaDiscord className="text-xl" />
+//         </div>
+//       </div>
+      
+//       {/* Right Section */}
+//       <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-8">
+//         {isRegister ? (
+//           <>
+//             <h2 className="text-3xl font-semibold mb-4">Create Account</h2>
+//             <p className="text-gray-500 mb-6">Sign up for a new account</p>
+//           </>
+//         ) : (
+//           <>
+//             <h2 className="text-3xl font-semibold mb-4">Sign In</h2>
+//             <p className="text-gray-500 mb-6">Sign in to your account</p>
+//           </>
+//         )}
+
+//         {/* OAuth Buttons */}
+//         <div className="flex gap-4 mb-6">
+//           <button className="border p-2 rounded-md flex items-center gap-2">
+//             <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+//             {isRegister ? "Sign up with Google" : "Sign in with Google"}
+//           </button>
+//           <button className="border p-2 rounded-md flex items-center gap-2">
+//             <img src="/apple-icon.svg" alt="Apple" className="w-5 h-5" />
+//             {isRegister ? "Sign up with Apple" : "Sign in with Apple"}
+//           </button>
+//         </div>
+
+//         {/* Form */}
+//         <div className="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">
+//           {isRegister && (
+//             <>
+//               <label className="block text-sm font-medium">Full Name</label>
+//               <input type="text" className="w-full p-2 border rounded mb-4" placeholder="John Doe" />
+//             </>
+//           )}
+//           <label className="block text-sm font-medium">Email address</label>
+//           <input type="email" className="w-full p-2 border rounded mb-4" placeholder="johndoe@gmail.com" />
+          
+//           <label className="block text-sm font-medium">Password</label>
+//           <input type="password" className="w-full p-2 border rounded mb-4" placeholder="••••••••" />
+          
+//           {!isRegister && (
+//             <a href="#" className="text-blue-600 text-sm mb-4 inline-block">Forgot password?</a>
+//           )}
+          
+//           <button className="w-full bg-blue-600 text-white p-2 rounded-md">
+//             {isRegister ? "Sign Up" : "Sign In"}
+//           </button>
+//         </div>
+        
+//         <p className="text-sm mt-4">
+//           {isRegister ? (
+//             <>Already have an account? <button className="text-blue-600" onClick={() => setIsRegister(false)}>Sign in</button></>
+//           ) : (
+//             <>Don't have an account? <button className="text-blue-600" onClick={() => setIsRegister(true)}>Register here</button></>
+//           )}
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Login;
+
+
+
+
+import React, { useState } from "react";
+import { FaGithub, FaTwitter, FaLinkedin, FaDiscord } from "react-icons/fa";
+import { auth, provider, signInWithPopup } from "../firebaseConfig";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const [isRegister, setIsRegister] = useState(false);
+  const navigate = useNavigate();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      localStorage.setItem("user", JSON.stringify(user)); // Store user in localStorage
+      toast.success("Login Successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error("Google Sign-In Failed!");
+    }
+  };
+
+  return (
+    <div className="flex h-screen w-full">
+      {/* Left Section */}
+      <div className="hidden md:flex flex-col justify-between bg-blue-600 text-white w-1/2 p-10 relative custom-shape">
+        <div className="absolute top-10 left-10">
+          <img src="/logo.png" alt="Logo" className="w-16 h-16" />
+        </div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-3xl font-bold">
+          BASE
+        </div>
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-4 left-28">
+          <FaGithub className="text-xl" />
+          <FaTwitter className="text-xl" />
+          <FaLinkedin className="text-xl" />
+          <FaDiscord className="text-xl" />
+        </div>
+      </div>
+
+      {/* Right Section */}
+      <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-8">
+        <h2 className="text-3xl font-semibold mb-4">{isRegister ? "Create Account" : "Sign In"}</h2>
+        <p className="text-gray-500 mb-6">{isRegister ? "Sign up for a new account" : "Sign in to your account"}</p>
+
+        {/* OAuth Buttons */}
+        <div className="flex gap-4 mb-6">
+          <button onClick={handleGoogleSignIn} className="border p-2 rounded-md flex items-center gap-2">
+            <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
+            {isRegister ? "Sign up with Google" : "Sign in with Google"}
+          </button>
+        </div>
+
+        <p className="text-sm mt-4">
+          {isRegister ? (
+            <>Already have an account? <button className="text-blue-600" onClick={() => setIsRegister(false)}>Sign in</button></>
+          ) : (
+            <>Don't have an account? <button className="text-blue-600" onClick={() => setIsRegister(true)}>Register here</button></>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
+

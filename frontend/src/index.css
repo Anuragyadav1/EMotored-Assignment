@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.custom-shape {
+  position: relative;
+  height: 100vh;
+  width: 50%;
+  background-color: #2563eb; /* Blue */
+  clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+  
+  
+  
+  
