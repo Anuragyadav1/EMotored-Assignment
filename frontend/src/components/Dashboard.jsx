@@ -310,7 +310,7 @@ function DashboardContent() {
           <h3 className="mb-4 text-lg font-bold">Top Products</h3>
           <Pie data={pieData} />
         </div>
-        <div className="mt-6">
+        <div className="mt-2 ml-2">
            <button onClick={() => setIsOpen(true)} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Add Profile</button>
          </div>
       </div>

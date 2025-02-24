@@ -13,6 +13,8 @@ const UsersPage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [formSubmitloading, setFormSubmitloading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
 
   useEffect(() => {
     fetchUsers();
@@ -35,6 +37,8 @@ const UsersPage = () => {
   };
 
   const handleDelete = async () => {
+    setDeleteLoading(true); // Start loading
+
     try {
       await axios.delete(`${BASE_URL}/delete/${deleteUserId}`);
       toast.success("User deleted successfully!");
@@ -42,6 +46,9 @@ const UsersPage = () => {
       setShowDeleteConfirm(false);
     } catch (error) {
       console.error("Error deleting user:", error);
+    }
+    finally {
+      setDeleteLoading(false); // Stop loading
     }
   };
 
@@ -163,7 +170,7 @@ const UsersPage = () => {
               />
               <div className="flex justify-end gap-2 mt-4">
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded" disabled={formSubmitloading}>
-                {loading ? "Updating..." : "Update"}
+                {formSubmitloading ? "Updating..." : "Update"}
 
                 </button>
                 <button
@@ -186,8 +193,8 @@ const UsersPage = () => {
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p className="mb-4">Are you sure you want to delete this user?</p>
             <div className="flex justify-end gap-2">
-              <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">
-                Delete
+              <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded" disabled={deleteLoading}>
+                {deleteLoading ? "Deleting..." : "Delete"}
               </button>
               <button onClick={() => setShowDeleteConfirm(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
                 Cancel
