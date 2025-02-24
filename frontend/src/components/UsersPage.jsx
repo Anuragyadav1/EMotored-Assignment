@@ -5,10 +5,9 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BASE_URL from "../config";
 
-
-
 const UsersPage = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -24,6 +23,8 @@ const UsersPage = () => {
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,37 +59,41 @@ const UsersPage = () => {
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-semibold mb-4">Users List</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              <th className="py-2 px-4">Name</th>
-              <th className="py-2 px-4">Email</th>
-              <th className="py-2 px-4">Phone</th>
-              <th className="py-2 px-4">YouTube</th>
-              <th className="py-2 px-4">Instagram</th>
-              <th className="py-2 px-4">City</th>
-              <th className="py-2 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user._id} className="border-b hover:bg-gray-100">
-                <td className="py-2 px-4">{user.name}</td>
-                <td className="py-2 px-4">{user.email}</td>
-                <td className="py-2 px-4">{user.phone}</td>
-                <td className="py-2 px-4"><a href={user.youtube} target="_blank" className="text-blue-600">YouTube</a></td>
-                <td className="py-2 px-4"><a href={user.instagram} target="_blank" className="text-pink-600">Instagram</a></td>
-                <td className="py-2 px-4">{user.city}</td>
-                <td className="py-2 px-4 flex gap-2">
-                  <button onClick={() => handleEdit(user)} className="text-green-600"><FaEdit /></button>
-                  <button onClick={() => { setShowDeleteConfirm(true); setDeleteUserId(user._id); }} className="text-red-600"><FaTrash /></button>
-                </td>
+      {loading ? (
+        <div className="text-center text-lg font-semibold">Loading users...</div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+            <thead className="bg-gray-800 text-white">
+              <tr>
+                <th className="py-2 px-4">Name</th>
+                <th className="py-2 px-4">Email</th>
+                <th className="py-2 px-4">Phone</th>
+                <th className="py-2 px-4">YouTube</th>
+                <th className="py-2 px-4">Instagram</th>
+                <th className="py-2 px-4">City</th>
+                <th className="py-2 px-4">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id} className="border-b hover:bg-gray-100">
+                  <td className="py-2 px-4">{user.name}</td>
+                  <td className="py-2 px-4">{user.email}</td>
+                  <td className="py-2 px-4">{user.phone}</td>
+                  <td className="py-2 px-4"><a href={user.youtube} target="_blank" className="text-blue-600">YouTube</a></td>
+                  <td className="py-2 px-4"><a href={user.instagram} target="_blank" className="text-pink-600">Instagram</a></td>
+                  <td className="py-2 px-4">{user.city}</td>
+                  <td className="py-2 px-4 flex gap-2">
+                    <button onClick={() => handleEdit(user)} className="text-green-600"><FaEdit /></button>
+                    <button onClick={() => { setShowDeleteConfirm(true); setDeleteUserId(user._id); }} className="text-red-600"><FaTrash /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Edit User Modal */}
       {showEditModal && (
@@ -107,19 +112,6 @@ const UsersPage = () => {
                 <button onClick={() => setShowEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg">
-            <p className="text-lg">Are you sure you want to delete this user?</p>
-            <div className="flex justify-end gap-2 mt-4">
-              <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-              <button onClick={() => setShowDeleteConfirm(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-            </div>
           </div>
         </div>
       )}
