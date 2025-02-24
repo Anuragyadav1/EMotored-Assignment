@@ -12,6 +12,7 @@ const UsersPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
+  const [formSubmitloading, setFormSubmitloading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -46,6 +47,8 @@ const UsersPage = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    setFormSubmitloading(true); // Disable submit button and show loading state
+
     try {
       await axios.put(`${BASE_URL}/update/${editingUser._id}`, editingUser);
       toast.success("User updated successfully!");
@@ -53,6 +56,9 @@ const UsersPage = () => {
       setShowEditModal(false);
     } catch (error) {
       console.error("Error updating user:", error);
+    }
+    finally{
+      setFormSubmitloading(false)
     }
   };
 
@@ -156,8 +162,9 @@ const UsersPage = () => {
                 className="w-full mb-2 p-2 border rounded"
               />
               <div className="flex justify-end gap-2 mt-4">
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                  Update
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded" disabled={formSubmitloading}>
+                {loading ? "Updating..." : "Update"}
+
                 </button>
                 <button
                   type="button"

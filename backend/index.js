@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const profileRoutes = require("./route/profileRoutes");
+const authRoutes = require("./route/authRoutes");
+
 
 const app = express();
 
@@ -19,6 +21,10 @@ connectDB();
 
 // Routes
 app.use("/api/users", profileRoutes);
+
+//auth routes
+app.use("/api/users/auth", authRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

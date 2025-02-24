@@ -236,6 +236,8 @@ const ProfileModal = ({ isOpen, setIsOpen }) => {
   });
 
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -243,6 +245,7 @@ const ProfileModal = ({ isOpen, setIsOpen }) => {
 
   const handleSubmit = async () => {
     setError(""); // Reset previous errors
+    setLoading(true); // Disable button and show loading state
     try {
       const response = await axios.post(`${BASE_URL}/add`, formData);
       toast.success("Profile added successfully!", { position: "top-right" });
@@ -260,6 +263,9 @@ const ProfileModal = ({ isOpen, setIsOpen }) => {
     } catch (error) {
       console.error("Error adding profile:", error.response?.data?.message || error.message);
       setError(error.response?.data?.message || "Failed to add profile.");
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -302,7 +308,10 @@ const ProfileModal = ({ isOpen, setIsOpen }) => {
               <input name="address" value={formData.address} onChange={handleChange} className="w-full p-2 border rounded mb-3" placeholder="Address" />
               <input name="city" value={formData.city} onChange={handleChange} className="w-full p-2 border rounded mb-3" placeholder="City" />
               <input name="zipCode" value={formData.zipCode} onChange={handleChange} className="w-full p-2 border rounded" placeholder="Zip Code" />
-              <button onClick={handleSubmit} className="mt-4 w-full bg-blue-600 text-white p-2 rounded">Submit</button>
+              <button onClick={handleSubmit} disabled={loading} className="mt-4 w-full bg-blue-600 text-white p-2 rounded">
+                 {loading ? "Submitting..." : "Submit"}
+
+              </button>
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
