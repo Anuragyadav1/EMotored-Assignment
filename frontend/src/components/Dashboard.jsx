@@ -148,10 +148,10 @@
 // }
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, Tab } from "@headlessui/react";
 import { Bar, Pie } from "react-chartjs-2";
-import { auth, signOut } from "../firebaseConfig";
+// import { auth, signOut } from "../firebaseConfig";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -185,6 +185,15 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, ArcElement, Tool
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Dashboard");
+  const [userName, setUserName] = useState(""); // State for user name
+
+  useEffect(() => {
+    // Retrieve user info from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.given_name) {
+      setUserName(user.given_name);
+    }
+  }, []);
 
   const sections = [
     { name: "Dashboard", icon: <LayoutDashboard /> },
@@ -248,7 +257,9 @@ export default function Dashboard() {
           <div className="flex items-center gap-4">
             <Search className="text-gray-500" />
             <Bell className="cursor-pointer" />
-            <User className="cursor-pointer" />
+            {/* <User className="cursor-pointer" /> */}
+            {/* Display User Name Instead of Icon */}
+            <span className="font-medium text-gray-700 cursor-pointer">{userName || "User"}</span>
           </div>
         </div>
 
