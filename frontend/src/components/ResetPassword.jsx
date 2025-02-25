@@ -82,6 +82,8 @@ const ResetPassword = () => {
     try {
       const res = await axios.post(`${BASE_URL}/auth/reset-password`, { token, password });
       toast.success(res.data.message);
+      setPassword("")
+      setConfirmPassword("")
       setTimeout(() => navigate("/"), 2000); // Redirect after success
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
