@@ -246,6 +246,7 @@ const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleGoogleSignIn = useGoogleLogin({
@@ -263,6 +264,22 @@ const Login = () => {
     },
     onError: () => toast.error("Google Sign-In Failed!"),
   });
+   
+    //handle forgot password
+    const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+    const [resetEmail, setResetEmail] = useState("");
+
+    const handlePasswordReset = async () => {
+      setForgotPasswordLoading(true)
+      try {
+        await axios.post(`${BASE_URL}/auth/forgot-password`, { email: resetEmail });
+        toast.success("Reset link sent to your email.");
+        setIsForgotPasswordOpen(false);
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Failed to send reset link!");
+      }
+    };
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -376,7 +393,12 @@ const Login = () => {
             </div>
             {!isRegister && (
               <div className="text-right">
-                <a href="#" className="text-blue-600 text-sm">Forgot password?</a>
+                {/* <a href="#" className="text-blue-600 text-sm">Forgot password?</a> */}
+                {/* type="button" prevents the form submission */}
+                <button type="button" onClick={() => setIsForgotPasswordOpen(true)} className="text-blue-600 text-sm">
+                  Forgot password?
+                </button>
+
               </div>
             )}
             <button 
@@ -397,6 +419,31 @@ const Login = () => {
             )}
           </p>
         </div>
+
+  {isForgotPasswordOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h3 className="text-xl font-semibold mb-4">Reset Password</h3>
+      <p className="text-sm text-gray-600 mb-4">
+        Enter your email address to receive a reset link.
+      </p>
+      <input
+        type="email"
+        className="w-full p-2 border rounded mb-4"
+        placeholder="Enter your email"
+        value={resetEmail}
+        onChange={(e) => setResetEmail(e.target.value)}
+      />
+      <div className="flex justify-end gap-2">
+        <button onClick={() => setIsForgotPasswordOpen(false)} className="px-4 py-2 text-gray-600">Cancel</button>
+        <button onClick={handlePasswordReset} className="px-4 py-2 bg-blue-600 text-white rounded" disabled={forgotPasswordLoading}>
+           {forgotPasswordLoading ? "Sending...":"Send Link"} 
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );

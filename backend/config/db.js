@@ -1,9 +1,4 @@
 const mongoose = require("mongoose");
-//username:  10anuragyadav2002
-//password: aaIdVx7t0zrW6okn
-
-//mongodb+srv://10anuragyadav2002:<db_password>@cluster0.zpitu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-//mongodb+srv://10anuragyadav2002:<db_password>@cluster0.zpitu.mongodb.net/CRUD-User
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);

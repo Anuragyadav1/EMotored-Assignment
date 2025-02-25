@@ -56,6 +56,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ResetPassword from "./components/ResetPassword";
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -66,6 +67,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/reset-password/:token" element={<ResetPassword/>} /> {/* No protection */}
         </Routes>
       </Router>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
