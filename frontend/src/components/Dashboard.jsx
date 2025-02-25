@@ -239,7 +239,11 @@ export default function Dashboard() {
     className={`flex items-center gap-2 p-2 rounded cursor-pointer ${
       activeSection === section.name ? "bg-blue-800" : ""
     }`}
-    onClick={() => setActiveSection(section.name)}
+    onClick={() => {
+    setActiveSection(section.name);
+    if (window.innerWidth < 768) setSidebarOpen(false); // Close sidebar on small screens
+  }}
+
   >
     {section.icon} {section.name}
   </p>
