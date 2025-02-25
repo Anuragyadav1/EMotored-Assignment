@@ -60,6 +60,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import BASE_URL from "../config";
 
 const ResetPassword = () => {
@@ -67,23 +69,22 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleReset = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     setLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}/auth/reset-password`, { token, password });
-      setMessage(res.data.message);
-      setTimeout(() => navigate("/"), 1000); // Redirect after success
+      toast.success(res.data.message);
+      setTimeout(() => navigate("/"), 2000); // Redirect after success
     } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong");
+      toast.error(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -91,15 +92,11 @@ const ResetPassword = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <ToastContainer position="top-right" autoClose={3000} />
+      
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white text-center">Reset Your Password</h2>
-        
-        {message && (
-          <p className={`mt-3 text-center text-sm ${message.includes("success") ? "text-green-500" : "text-red-500"}`}>
-            {message}
-          </p>
-        )}
-        
+
         <form onSubmit={handleReset} className="mt-5">
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-300 text-sm mb-1">New Password</label>
