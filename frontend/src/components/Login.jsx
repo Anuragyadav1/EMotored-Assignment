@@ -274,9 +274,14 @@ const Login = () => {
       try {
         await axios.post(`${BASE_URL}/auth/forgot-password`, { email: resetEmail });
         toast.success("Reset link sent to your email.");
+        setResetEmail(""); // Clear email input field
+
         setIsForgotPasswordOpen(false);
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to send reset link!");
+      }
+      finally{
+        setForgotPasswordLoading(false)
       }
     };
 
