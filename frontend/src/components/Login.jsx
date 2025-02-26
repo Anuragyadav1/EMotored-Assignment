@@ -270,6 +270,11 @@ const Login = () => {
     const [resetEmail, setResetEmail] = useState("");
 
     const handlePasswordReset = async () => {
+      if (!resetEmail.trim()) {
+        //alert("Please enter your email address.");
+        toast.error("Please enter your email address.");
+        return;
+      }
       setForgotPasswordLoading(true)
       try {
         await axios.post(`${BASE_URL}/auth/forgot-password`, { email: resetEmail });
@@ -438,6 +443,7 @@ const Login = () => {
         placeholder="Enter your email"
         value={resetEmail}
         onChange={(e) => setResetEmail(e.target.value)}
+        required
       />
       <div className="flex justify-end gap-2">
         <button onClick={() => setIsForgotPasswordOpen(false)} className="px-4 py-2 text-gray-600">Cancel</button>
