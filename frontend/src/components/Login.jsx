@@ -435,30 +435,30 @@ const Login = () => {
           </p>
         </div>
 
-  {isForgotPasswordOpen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h3 className="text-xl font-semibold mb-4">Reset Password</h3>
-      <p className="text-sm text-gray-600 mb-4">
-        Enter your email address to receive a reset link.
-      </p>
-      <input
-        type="email"
-        className="w-full p-2 border rounded mb-4"
-        placeholder="Enter your email"
-        value={resetEmail}
-        onChange={(e) => setResetEmail(e.target.value)}
-        required
-      />
-      <div className="flex justify-end gap-2">
-        <button onClick={handleForgotPasswordOpen} className="px-4 py-2 text-gray-600">Cancel</button>
-        <button onClick={handlePasswordReset} className="px-4 py-2 bg-blue-600 text-white rounded" disabled={forgotPasswordLoading}>
-           {forgotPasswordLoading ? "Sending...":"Send Link"} 
-        </button>
+      {isForgotPasswordOpen && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h3 className="text-xl font-semibold mb-4">Reset Password</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Enter your email address to receive a reset link.
+          </p>
+          <input
+            type="email"
+            className="w-full p-2 border rounded mb-4"
+            placeholder="Enter your email"
+            value={resetEmail}
+            onChange={(e) => setResetEmail(e.target.value)}
+            required
+          />
+          <div className="flex justify-end gap-2">
+            <button onClick={handleForgotPasswordOpen} className="px-4 py-2 text-gray-600">Cancel</button>
+            <button onClick={handlePasswordReset} className="px-4 py-2 bg-blue-600 text-white rounded" disabled={forgotPasswordLoading}>
+              {forgotPasswordLoading ? "Sending...":"Send Link"} 
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-)}
+      )}
 
       </div>
     </div>
