@@ -295,6 +295,11 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleForgotPasswordOpen = () => {
+    setResetEmail(""); // Clear email input field
+    setIsForgotPasswordOpen(false);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -446,7 +451,7 @@ const Login = () => {
         required
       />
       <div className="flex justify-end gap-2">
-        <button onClick={() => setIsForgotPasswordOpen(false)} className="px-4 py-2 text-gray-600">Cancel</button>
+        <button onClick={handleForgotPasswordOpen} className="px-4 py-2 text-gray-600">Cancel</button>
         <button onClick={handlePasswordReset} className="px-4 py-2 bg-blue-600 text-white rounded" disabled={forgotPasswordLoading}>
            {forgotPasswordLoading ? "Sending...":"Send Link"} 
         </button>

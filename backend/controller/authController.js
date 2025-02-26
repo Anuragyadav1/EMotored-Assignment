@@ -42,10 +42,10 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    const user = await User.findOne({ email }); // Ensure fresh data
+    const user = await User.findOne({ email }); 
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials." });
+      return res.status(400).json({ message: "User not found." });
     }
 
     // Debugging logs
@@ -55,9 +55,10 @@ const loginUser = async (req, res) => {
     // Correct password comparison using bcrypt.compare
     const isMatch = await bcrypt.compare(password, user.password);
     //console.log("Password Match:", isMatch);
+    
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials." });
+      return res.status(400).json({ message: "Incorrect password." });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
